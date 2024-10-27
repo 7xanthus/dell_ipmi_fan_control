@@ -98,15 +98,15 @@ while true; do
 
             if [[ $T > 55 ]]; then
                 echo "--> 60℃ >= T > 55℃，设定风扇转速为 38%"
-                ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x10
+                ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x26
             else
 
                 if [[ $T > 45 ]]; then
                     echo "--> 55℃ >= T > 45℃，设定风扇转速为 32%"
-                    ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x10
+                    ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x20
                 else
                     echo "--> 45℃ >= T，设定风扇转速为 25%"
-                    ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x0a
+                    ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x19
                 fi
             fi
         fi
