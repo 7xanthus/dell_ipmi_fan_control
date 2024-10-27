@@ -90,22 +90,21 @@ while true; do
         echo "$IDRACIP: -- 当前温度为 $T度 --"
 
         if [[ $T > $TEMPTHRESHOLD ]]; then
-            echo "--> T > 60℃，启用自动风扇控制"
+            echo "--> 温度高于60度，启用自动风扇控制"
             ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x01 0x01
         else
-            echo "--> T <= 60℃，启用手动风扇控制"
+            echo "--> 温度低于60度，启用手动风扇控制"
             ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x01 0x00
 
             if [[ $T > 55 ]]; then
-                echo "--> 60℃ >= T > 55℃，设定风扇转速为 38%"
+                echo "--> 温度高于55度，设定风扇转速为 38%"
                 ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x26
             else
-
                 if [[ $T > 45 ]]; then
-                    echo "--> 55℃ >= T > 45℃，设定风扇转速为 32%"
+                    echo "--> 温度高于45度，设定风扇转速为 32%"
                     ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x20
                 else
-                    echo "--> 45℃ >= T，设定风扇转速为 25%"
+                    echo "--> 温度低于45度，设定风扇转速为 25%"
                     ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x19
                 fi
             fi
@@ -113,4 +112,7 @@ while true; do
     else
         continue
     fi
+
+    # 每次循环结束后等待 60 秒
+    sleep 60
 done
