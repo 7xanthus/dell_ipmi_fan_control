@@ -7,7 +7,7 @@ PID_FILE="/run/dell_ipmi_fan_control.pid"
 IDRACIP="IP地址"
 IDRACUSER="用户名"
 IDRACPASSWORD="密码"
-TEMPTHRESHOLD="60"
+TEMPTHRESHOLD="65"
 
 DIR=$(
     cd "$(dirname "$0")"
@@ -90,22 +90,22 @@ while true; do
         echo "$IDRACIP: -- 当前温度为 $T度 --"
 
         if [[ $T > $TEMPTHRESHOLD ]]; then
-            echo "--> 温度高于60度，启用自动风扇控制"
+            echo "--> 温度高于65度，启用自动风扇控制"
             ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x01 0x01
         else
-            echo "--> 温度低于60度，启用手动风扇控制"
+            echo "--> 温度低于65度，启用手动风扇控制"
             ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x01 0x00
 
-            if [[ $T > 55 ]]; then
-                echo "--> 温度高于55度，设定风扇转速为 38%"
-                ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x26
+            if [[ $T > 62 ]]; then
+                echo "--> 温度高于62度，设定风扇转速为 42%"
+                ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x2a
             else
-                if [[ $T > 45 ]]; then
-                    echo "--> 温度高于45度，设定风扇转速为 32%"
+                if [[ $T > 42 ]]; then
+                    echo "--> 温度高于42度，设定风扇转速为 32%"
                     ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x20
                 else
-                    echo "--> 温度低于45度，设定风扇转速为 25%"
-                    ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x19
+                    echo "--> 温度低于42度，设定风扇转速为 22%"
+                    ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPASSWORD raw 0x30 0x30 0x02 0xff 0x16
                 fi
             fi
         fi
